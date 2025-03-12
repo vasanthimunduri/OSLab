@@ -1,67 +1,60 @@
 #include <stdio.h>
 
- int main() {
-    int i, j, k, min, rs[25], m[10], count[10], flag[25], n, f, pf = 0, next = 1;
+int main() {
+    int rs[50], i, j, k, m, f, cntr[20], a[20], min, pf = 0, freq[20];
 
-    printf("Enter the length of reference string -- ");
-    scanf("%d", &n);
+    printf("\nEnter number of page references -- ");
+    scanf("%d", &m);
 
-    printf("Enter the reference string -- ");
-    for (i = 0; i < n; i++) {
+    printf("\nEnter the reference string -- ");
+    for(i = 0; i < m; i++) {
         scanf("%d", &rs[i]);
-        flag[i] = 0;
     }
 
-    printf("Enter the number of frames -- ");
+    printf("\nEnter the available number of frames -- ");
     scanf("%d", &f);
 
-    for (i = 0; i < f; i++) {
-        count[i] = 0;
-        m[i] = -1;
+    for(i = 0; i < f; i++) {
+        a[i] = -1;
+        cntr[i] = 0;
+        freq[i] = 0;
     }
 
-    printf("\nThe Page Replacement process is -- \n");
+    printf("\nThe Page Replacement Process is – \n");
+    for(i = 0; i < m; i++) {
+        int found = 0;
 
-    for (i = 0; i < n; i++) {
-
-        for (j = 0; j < f; j++) {
-            if (m[j] == rs[i]) {
-                flag[i] = 1;
-                count[j] = next;
-                next++;
+        for(j = 0; j < f; j++) {
+            if(rs[i] == a[j]) {
+                freq[j]++;
+                found = 1;
+                break;
             }
         }
 
-        if (flag[i] == 0) {
-            if (i < f) {
-                m[i] = rs[i];
-                count[i] = next;
-                next++;
-            } else {
-                min = 0;
-                for (j = 1; j < f; j++) {
-                    if (count[min] > count[j]) {
-                        min = j;
-                    }
+        if(!found) {
+            min = 0;
+            for(k = 1; k < f; k++) {
+                if(freq[k] < freq[min]) {
+                    min = k;
                 }
-                m[min] = rs[i];
-                count[min] = next;
-                next++;
             }
+            a[min] = rs[i];
+            freq[min] = 1;
             pf++;
         }
 
-        for (j = 0; j < f; j++) {
-            printf("%d\t", m[j]);
+        printf("\n");
+        for(j = 0; j < f; j++) {
+            printf("\t%d", a[j]);
         }
 
-        if (flag[i] == 0) {
-            printf("PF No. -- %d", pf);
+        if(j == f) {
+            printf("\tPF No. %d", pf);
         }
-        printf("\n");
     }
 
-    printf("\nThe number of page faults using LRU are %d", pf);
+    printf("\n\n Total number of page faults -- %d", pf);
 
-    getchar(); 
+    return 0;
 }
